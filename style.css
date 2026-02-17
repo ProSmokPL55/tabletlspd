@@ -1,3 +1,4 @@
+/* LSPD Tablet Style - poprawiony, czysty CSS */
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
     background: #0b1120;
@@ -87,6 +88,7 @@ button:hover {
     margin-top: 10px;
 }
 
+/* Profil obywatela i lista */
 .citizen-card, .officer-card {
     background: #1e40af;
     border-radius: 8px;
@@ -101,7 +103,7 @@ button:hover {
     width: 100px;
     height: 100px;
     object-fit: cover;
-    border-radius: 50%;
+    border-radius: 10px;
 }
 
 .citizen-info {
@@ -123,13 +125,13 @@ button:hover {
     font-weight: bold;
 }
 
-.history, .notes {
+.notes, .history, .searches {
     background: #2563eb;
-    padding: 5px;
+    padding: 8px;
     margin-top: 5px;
     border-radius: 5px;
 }
 
-.history h4, .notes h4 {
+.notes h4, .history h4, .searches h4 {
     margin: 0 0 5px 0;
 }

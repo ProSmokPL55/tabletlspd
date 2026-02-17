@@ -10,50 +10,41 @@
     <header>
         <h1>Tablet LSPD</h1>
         <div class="tabs">
-            <button class="tab-btn active" onclick="openTab('citizens')">Obywatele</button>
-            <button class="tab-btn" onclick="openTab('search')">Poszukiwania</button>
-            <button class="tab-btn" onclick="openTab('officers')">Policjanci</button>
+            <button class="tab-btn active" onclick="openTab('addCitizenTab')">Dodaj obywatela</button>
+            <button class="tab-btn" onclick="openTab('citizensTab')">Obywatele</button>
+            <button class="tab-btn" onclick="openTab('officersTab')">Policjanci</button>
         </div>
     </header>
 
     <main>
-        <!-- Obywatele -->
-        <div id="citizens" class="tab-content active">
-            <div class="split">
-                <div class="panel">
-                    <h2>Dodaj obywatela</h2>
-                    <input id="citizenFirst" placeholder="Imię">
-                    <input id="citizenLast" placeholder="Nazwisko">
-                    <input id="citizenPhoto" placeholder="URL zdjęcia">
-                    <button onclick="addCitizen()">Dodaj</button>
-                    <h3>Lista obywateli</h3>
-                    <div id="citizenList" class="list"></div>
-                </div>
-            </div>
+        <!-- Dodaj obywatela -->
+        <div id="addCitizenTab" class="tab-content active">
+            <h2>Dodaj obywatela</h2>
+            <input id="citizenFirst" placeholder="Imię">
+            <input id="citizenLast" placeholder="Nazwisko">
+            <input id="citizenPhoto" placeholder="URL zdjęcia">
+            <button onclick="addCitizen()">Dodaj</button>
         </div>
 
-        <!-- Wyszukiwanie -->
-        <div id="search" class="tab-content">
-            <h2>Wyszukaj obywatela</h2>
+        <!-- Obywatele -->
+        <div id="citizensTab" class="tab-content">
+            <h2>Obywatele</h2>
             <input id="searchInput" placeholder="Wpisz imię lub nazwisko" oninput="searchCitizen()">
             <div id="searchResults" class="list"></div>
         </div>
 
         <!-- Policjanci -->
-        <div id="officers" class="tab-content">
-            <div class="split">
-                <div class="panel">
-                    <h2>Dodaj policjanta</h2>
-                    <input id="officerName" placeholder="Imię i nazwisko">
-                    <input id="badgeNumber" placeholder="Numer odznaki">
-                    <button onclick="addOfficer()">Dodaj</button>
-                    <h3>Katalog policjantów</h3>
-                    <div id="officerList" class="list"></div>
-                </div>
-            </div>
+        <div id="officersTab" class="tab-content">
+            <h2>Dodaj policjanta</h2>
+            <input id="officerName" placeholder="Imię i nazwisko">
+            <input id="badgeNumber" placeholder="Numer odznaki">
+            <button onclick="addOfficer()">Dodaj</button>
+            <h3>Katalog policjantów</h3>
+            <div id="officerList" class="list"></div>
         </div>
     </main>
 </div>
+
 <script src="script.js"></script>
 </body>
 </html>

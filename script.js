@@ -1,12 +1,21 @@
 let citizens = [];
 let officers = [];
 
+const sampleSentences = [
+    "Grzywna",
+    "Więzienie 30 dni",
+    "Więzienie 90 dni",
+    "Areszt domowy 14 dni",
+    "Zatrzymanie na 48h"
+];
+
 // Tabs
 function openTab(tabName){
     document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
     document.getElementById(tabName).classList.add('active');
-    document.querySelector(`.tab-btn[onclick="openTab('${tabName}')"]`).classList.add('active');
+    const btn = document.querySelector(`.tab-btn[onclick="openTab('${tabName}')"]`);
+    if(btn) btn.classList.add('active');
 }
 
 // Add citizen
@@ -16,112 +25,120 @@ function addCitizen(){
     const photo=document.getElementById('citizenPhoto').value;
     if(!first||!last) return alert("Podaj imię i nazwisko!");
     const ssn=Math.floor(100000000 + Math.random()*900000000);
-    citizens.push({
-        first,last,photo,ssn,
-        notes:[], wanted:0,
-        searches:[], history:[]
-    });
+    citizens.push({first,last,photo,ssn,wanted:0,notes:[],searches:[],history:[]});
     document.getElementById('citizenFirst').value='';
     document.getElementById('citizenLast').value='';
     document.getElementById('citizenPhoto').value='';
-    searchCitizen();
+    displayCitizenList();
 }
 
-// Search citizen
-function searchCitizen(){
-    const query=document.getElementById('searchInput')?.value.toLowerCase()||'';
-    const results=document.getElementById('searchResults');
-    results.innerHTML='';
-    citizens.filter(c=>c.first.toLowerCase().includes(query)||c.last.toLowerCase().includes(query))
-    .forEach(c=>{
-        const card=document.createElement('div');
-        card.className='citizen-card';
-        const isWanted=c.searches.length>0;
-        card.innerHTML=`
-            <img src="${c.photo||'https://via.placeholder.com/100'}" alt="photo">
-            <div class="citizen-info">
-                ${isWanted?'<div class="poszukiwanie-bar">POSZUKIWANY</div>':''}
-                <strong>${c.first} ${c.last}</strong> (SSN: ${c.ssn})<br>
-                Wanted: <span class="wanted">${'★'.repeat(c.wanted)}</span><br>
-                <button onclick="addSearch('${c.ssn}')">Dodaj poszukiwanie</button>
-                <button onclick="addNote('${c.ssn}')">Dodaj notatkę</button>
-                <button onclick="addHistory('${c.ssn}')">Dodaj wyrok</button>
-
-                <div class="notes">
-                    <h4>Notatki</h4>
-                    ${c.notes.map(n=>`<div>${n}</div>`).join('')}
+// Display list of citizens
+function displayCitizenList(){
+    const query=document.getElementById('searchInput').value.toLowerCase();
+    const list = document.getElementById('citizenList');
+    list.innerHTML='';
+    citizens.filter(c=>c.first.toLowerCase().includes(query) || c.last.toLowerCase().includes(query))
+        .forEach(c=>{
+            const item=document.createElement('div');
+            item.className='citizen-card';
+            const status = c.searches.length>0 ? 'POSZUKIWANY' : 'W porządku';
+            const barColor = c.searches.length>0 ? 'red' : '#1e40af';
+            item.innerHTML = `
+                <div class="citizen-info" style="cursor:pointer;" onclick="openProfile('${c.ssn}')">
+                    <strong>${c.first} ${c.last}</strong>
+                    <div style="background:${barColor};color:black;padding:3px;border-radius:3px;margin-top:3px;">${status}</div>
                 </div>
+            `;
+            list.appendChild(item);
+        });
+}
 
-                <div class="history">
-                    <h4>Historia wyroków</h4>
-                    ${c.history.map(h=>`<div>${h}</div>`).join('')}
-                </div>
-            </div>
-        `;
-        results.appendChild(card);
-    });
+// Open citizen profile
+function openProfile(ssn){
+    const citizen = citizens.find(c=>c.ssn==ssn);
+    if(!citizen) return;
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    document.getElementById('profileTab').classList.add('active');
+
+    const profile=document.getElementById('profileContent');
+    profile.innerHTML=`
+        <h2>${citizen.first} ${citizen.last}</h2>
+        <img src="${citizen.photo||'https://via.placeholder.com/150'}" style="width:150px;height:150px;border-radius:10px;">
+        <p>SSN: ${citizen.ssn}</p>
+        <p>Wanted: <span class="wanted">${'★'.repeat(citizen.wanted)}</span></p>
+        <button onclick="addSearch('${citizen.ssn}')">Dodaj poszukiwanie</button>
+        <button onclick="addNote('${citizen.ssn}')">Dodaj notatkę</button>
+        <button onclick="addHistory('${citizen.ssn}')">Dodaj wyrok</button>
+        <button onclick="editPhoto('${citizen.ssn}')">Edytuj zdjęcie</button>
+        <button onclick="deleteCitizen('${citizen.ssn}')">Usuń profil</button>
+
+        <div class="notes">
+            <h4>Notatki</h4>
+            ${citizen.notes.map(n=>`<div>${n}</div>`).join('')}
+        </div>
+
+        <div class="history">
+            <h4>Historia wyroków</h4>
+            ${citizen.history.map(h=>`<div>${h}</div>`).join('')}
+        </div>
+
+        <div class="searches">
+            <h4>Poszukiwania</h4>
+            ${citizen.searches.map(s=>`<div class="poszukiwanie">${s.desc} (ważne do: ${s.expiry})</div>`).join('')}
+        </div>
+    `;
+}
+
+// Close profile
+function closeProfile(){
+    openTab('citizensTab');
 }
 
 // Add search
 function addSearch(ssn){
-    const desc=prompt("Opis poszukiwania:");
+    const desc = prompt("Opis poszukiwania:");
     if(!desc) return;
-    const expiry=prompt("Data wygaśnięcia (np. 2026-02-20):");
-    const citizen=citizens.find(c=>c.ssn==ssn);
+    const expiry = prompt("Data wygaśnięcia (np. 2026-02-20):");
+    const citizen = citizens.find(c=>c.ssn==ssn);
     citizen.searches.push({desc,expiry});
-    searchCitizen();
+    displayCitizenList();
+    openProfile(ssn);
 }
 
 // Add note
 function addNote(ssn){
-    const note=prompt("Treść notatki:");
+    const note = prompt("Treść notatki:");
     if(!note) return;
-    const citizen=citizens.find(c=>c.ssn==ssn);
+    const citizen = citizens.find(c=>c.ssn==ssn);
     citizen.notes.push(note);
-    searchCitizen();
+    openProfile(ssn);
 }
 
 // Add history
 function addHistory(ssn){
-    const h=prompt("Dodaj wyrok / wydarzenie:");
-    if(!h) return;
-    const citizen=citizens.find(c=>c.ssn==ssn);
+    const h = sampleSentences[Math.floor(Math.random()*sampleSentences.length)];
+    const citizen = citizens.find(c=>c.ssn==ssn);
     citizen.history.push(h);
-    searchCitizen();
+    openProfile(ssn);
 }
 
-// Wanted level
-document.addEventListener('input',e=>{
-    if(e.target.id?.startsWith('wanted-')){
-        const ssn=e.target.id.replace('wanted-','');
-        const val=parseInt(e.target.value)||0;
-        const citizen=citizens.find(c=>c.ssn==ssn);
-        citizen.wanted=Math.min(Math.max(val,0),5);
-        searchCitizen();
-    }
-});
+// Edit photo
+function editPhoto(ssn){
+    const url = prompt("Nowy URL zdjęcia:");
+    if(!url) return;
+    const citizen = citizens.find(c=>c.ssn==ssn);
+    citizen.photo = url;
+    openProfile(ssn);
+}
+
+// Delete citizen
+function deleteCitizen(ssn){
+    if(!confirm("Na pewno chcesz usunąć ten profil?")) return;
+    citizens = citizens.filter(c=>c.ssn!==ssn);
+    displayCitizenList();
+    closeProfile();
+}
 
 // Officers
 function addOfficer(){
-    const name=document.getElementById('officerName').value;
-    const badge=document.getElementById('badgeNumber').value;
-    if(!name||!badge)return alert("Podaj imię i numer odznaki!");
-    officers.push({name,badge});
-    displayOfficers();
-    document.getElementById('officerName').value='';
-    document.getElementById('badgeNumber').value='';
-}
-
-function displayOfficers(){
-    const list=document.getElementById('officerList');
-    list.innerHTML='';
-    officers.forEach(o=>{
-        const card=document.createElement('div');
-        card.className='officer-card';
-        card.innerHTML=`<strong>${o.name}</strong> - Odznaka: ${o.badge}`;
-        list.appendChild(card);
-    });
-}
-
-// Open default tab
-openTab('addCitizenTab');
+    const name=document.get

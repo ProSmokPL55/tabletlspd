@@ -9,16 +9,17 @@ const sampleSentences = [
     "Zatrzymanie na 48h"
 ];
 
-// Tabs
+// OTWIERANIE ZAKŁADEK
 function openTab(tabName){
     document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    document.getElementById(tabName).classList.add('active');
+    const tab = document.getElementById(tabName);
+    if(tab) tab.classList.add('active');
     const btn = document.querySelector(`.tab-btn[onclick="openTab('${tabName}')"]`);
     if(btn) btn.classList.add('active');
 }
 
-// Add citizen
+// DODAWANIE OBYWATELA
 function addCitizen(){
     const first=document.getElementById('citizenFirst').value;
     const last=document.getElementById('citizenLast').value;
@@ -32,7 +33,7 @@ function addCitizen(){
     displayCitizenList();
 }
 
-// Display list of citizens
+// LISTA OBYWATELI
 function displayCitizenList(){
     const query=document.getElementById('searchInput').value.toLowerCase();
     const list = document.getElementById('citizenList');
@@ -53,7 +54,7 @@ function displayCitizenList(){
         });
 }
 
-// Open citizen profile
+// PROFIL OBYWATELA
 function openProfile(ssn){
     const citizen = citizens.find(c=>c.ssn==ssn);
     if(!citizen) return;
@@ -89,12 +90,12 @@ function openProfile(ssn){
     `;
 }
 
-// Close profile
+// POWRÓT DO LISTY
 function closeProfile(){
     openTab('citizensTab');
 }
 
-// Add search
+// FUNKCJE PROFILU
 function addSearch(ssn){
     const desc = prompt("Opis poszukiwania:");
     if(!desc) return;
@@ -102,43 +103,3 @@ function addSearch(ssn){
     const citizen = citizens.find(c=>c.ssn==ssn);
     citizen.searches.push({desc,expiry});
     displayCitizenList();
-    openProfile(ssn);
-}
-
-// Add note
-function addNote(ssn){
-    const note = prompt("Treść notatki:");
-    if(!note) return;
-    const citizen = citizens.find(c=>c.ssn==ssn);
-    citizen.notes.push(note);
-    openProfile(ssn);
-}
-
-// Add history
-function addHistory(ssn){
-    const h = sampleSentences[Math.floor(Math.random()*sampleSentences.length)];
-    const citizen = citizens.find(c=>c.ssn==ssn);
-    citizen.history.push(h);
-    openProfile(ssn);
-}
-
-// Edit photo
-function editPhoto(ssn){
-    const url = prompt("Nowy URL zdjęcia:");
-    if(!url) return;
-    const citizen = citizens.find(c=>c.ssn==ssn);
-    citizen.photo = url;
-    openProfile(ssn);
-}
-
-// Delete citizen
-function deleteCitizen(ssn){
-    if(!confirm("Na pewno chcesz usunąć ten profil?")) return;
-    citizens = citizens.filter(c=>c.ssn!==ssn);
-    displayCitizenList();
-    closeProfile();
-}
-
-// Officers
-function addOfficer(){
-    const name=document.get

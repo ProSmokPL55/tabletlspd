@@ -11,54 +11,26 @@ const sampleSentences = [
 
 // OTWIERANIE ZAKŁADEK
 function openTab(tabName){
+    // Ukryj wszystkie tab-content
     document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    // Usuń active z przycisków
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    // Pokaż wybraną zakładkę
     const tab = document.getElementById(tabName);
     if(tab) tab.classList.add('active');
+    // Ustaw active dla przycisku (tylko dla headera)
     const btn = document.querySelector(`.tab-btn[onclick="openTab('${tabName}')"]`);
     if(btn) btn.classList.add('active');
 }
 
-// DODAWANIE OBYWATELA
-function addCitizen(){
-    const first=document.getElementById('citizenFirst').value;
-    const last=document.getElementById('citizenLast').value;
-    const photo=document.getElementById('citizenPhoto').value;
-    if(!first||!last) return alert("Podaj imię i nazwisko!");
-    const ssn=Math.floor(100000000 + Math.random()*900000000);
-    citizens.push({first,last,photo,ssn,wanted:0,notes:[],searches:[],history:[]});
-    document.getElementById('citizenFirst').value='';
-    document.getElementById('citizenLast').value='';
-    document.getElementById('citizenPhoto').value='';
-    displayCitizenList();
-}
-
-// LISTA OBYWATELI
-function displayCitizenList(){
-    const query=document.getElementById('searchInput').value.toLowerCase();
-    const list = document.getElementById('citizenList');
-    list.innerHTML='';
-    citizens.filter(c=>c.first.toLowerCase().includes(query) || c.last.toLowerCase().includes(query))
-        .forEach(c=>{
-            const item=document.createElement('div');
-            item.className='citizen-card';
-            const status = c.searches.length>0 ? 'POSZUKIWANY' : 'W porządku';
-            const barColor = c.searches.length>0 ? 'red' : '#1e40af';
-            item.innerHTML = `
-                <div class="citizen-info" style="cursor:pointer;" onclick="openProfile('${c.ssn}')">
-                    <strong>${c.first} ${c.last}</strong>
-                    <div style="background:${barColor};color:black;padding:3px;border-radius:3px;margin-top:3px;">${status}</div>
-                </div>
-            `;
-            list.appendChild(item);
-        });
-}
-
-// PROFIL OBYWATELA
+// OTWIERANIE PROFILU
 function openProfile(ssn){
     const citizen = citizens.find(c=>c.ssn==ssn);
     if(!citizen) return;
+
+    // Ukryj wszystkie tab-content (lista, dodawanie, policjanci)
     document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    // Pokaż profil
     document.getElementById('profileTab').classList.add('active');
 
     const profile=document.getElementById('profileContent');
@@ -72,6 +44,7 @@ function openProfile(ssn){
         <button onclick="addHistory('${citizen.ssn}')">Dodaj wyrok</button>
         <button onclick="editPhoto('${citizen.ssn}')">Edytuj zdjęcie</button>
         <button onclick="deleteCitizen('${citizen.ssn}')">Usuń profil</button>
+        <button onclick="closeProfile()">← Powrót do listy</button>
 
         <div class="notes">
             <h4>Notatki</h4>
@@ -90,8 +63,9 @@ function openProfile(ssn){
     `;
 }
 
-// POWRÓT DO LISTY
+// POWRÓT Z PROFILU
 function closeProfile(){
+    // Wróć do listy obywateli
     openTab('citizensTab');
 }
 

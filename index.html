@@ -18,16 +18,18 @@
 
     <main>
         <!-- Obywatele -->
-        <div id="citizens" class="tab-content">
-            <h2>Dodaj obywatela</h2>
-            <div class="form-row">
-                <input id="citizenFirst" placeholder="Imię">
-                <input id="citizenLast" placeholder="Nazwisko">
-                <input id="citizenPhoto" placeholder="URL zdjęcia">
-                <button onclick="addCitizen()">Dodaj</button>
+        <div id="citizens" class="tab-content active">
+            <div class="split">
+                <div class="panel">
+                    <h2>Dodaj obywatela</h2>
+                    <input id="citizenFirst" placeholder="Imię">
+                    <input id="citizenLast" placeholder="Nazwisko">
+                    <input id="citizenPhoto" placeholder="URL zdjęcia">
+                    <button onclick="addCitizen()">Dodaj</button>
+                    <h3>Lista obywateli</h3>
+                    <div id="citizenList" class="list"></div>
+                </div>
             </div>
-            <h3>Lista obywateli</h3>
-            <div id="citizenList" class="list"></div>
         </div>
 
         <!-- Wyszukiwanie -->
@@ -39,18 +41,19 @@
 
         <!-- Policjanci -->
         <div id="officers" class="tab-content">
-            <h2>Dodaj policjanta</h2>
-            <div class="form-row">
-                <input id="officerName" placeholder="Imię i nazwisko">
-                <input id="badgeNumber" placeholder="Numer odznaki">
-                <button onclick="addOfficer()">Dodaj</button>
+            <div class="split">
+                <div class="panel">
+                    <h2>Dodaj policjanta</h2>
+                    <input id="officerName" placeholder="Imię i nazwisko">
+                    <input id="badgeNumber" placeholder="Numer odznaki">
+                    <button onclick="addOfficer()">Dodaj</button>
+                    <h3>Katalog policjantów</h3>
+                    <div id="officerList" class="list"></div>
+                </div>
             </div>
-            <h3>Katalog policjantów</h3>
-            <div id="officerList" class="list"></div>
         </div>
     </main>
 </div>
-
 <script src="script.js"></script>
 </body>
 </html>

@@ -52,4 +52,72 @@ function searchCitizen() {
             card.innerHTML = `
                 <img src="${c.photo || 'https://via.placeholder.com/70'}" alt="photo">
                 <div>
-                    <strong>${c.first} ${c.last}
+                    <strong>${c.first} ${c.last}</strong> (SSN: ${c.ssn})<br>
+                    Wanted: <span class="wanted">${'★'.repeat(c.wanted)}</span><br>
+                    <button onclick="addSearch('${c.ssn}')">Dodaj poszukiwanie</button>
+                    <button onclick="addNote('${c.ssn}')">Dodaj notatkę</button><br>
+                    <input type="number" id="wanted-${c.ssn}" placeholder="Wanted 0-5" min="0" max="5">
+                    <div id="searches-${c.ssn}">
+                        ${c.searches.map(s => `<div class="poszukiwanie">${s.desc} (ważne do: ${s.expiry})</div>`).join('')}
+                    </div>
+                </div>
+            `;
+            results.appendChild(card);
+        });
+}
+
+function addSearch(ssn) {
+    const desc = prompt("Opis poszukiwania:");
+    const expiry = prompt("Data wygaśnięcia (np. 2026-02-20):");
+    const citizen = citizens.find(c => c.ssn==ssn);
+    if(desc && expiry) {
+        citizen.searches.push({desc, expiry});
+        searchCitizen();
+    }
+}
+
+function addNote(ssn) {
+    const note = prompt("Treść notatki:");
+    const citizen = citizens.find(c => c.ssn==ssn);
+    if(note) {
+        citizen.notes.push(note);
+        displayCitizens();
+        searchCitizen();
+    }
+}
+
+document.addEventListener('input', e => {
+    if(e.target.id.startsWith('wanted-')) {
+        const ssn = e.target.id.replace('wanted-', '');
+        const val = parseInt(e.target.value) || 0;
+        const citizen = citizens.find(c => c.ssn==ssn);
+        citizen.wanted = Math.min(Math.max(val,0),5);
+        displayCitizens();
+        searchCitizen();
+    }
+});
+
+// Officer functions
+function addOfficer() {
+    const name = document.getElementById('officerName').value;
+    const badge = document.getElementById('badgeNumber').value;
+    if(!name || !badge) return alert("Podaj imię i numer odznaki!");
+    officers.push({name, badge});
+    displayOfficers();
+    document.getElementById('officerName').value='';
+    document.getElementById('badgeNumber').value='';
+}
+
+function displayOfficers() {
+    const list = document.getElementById('officerList');
+    list.innerHTML = '';
+    officers.forEach(o => {
+        const card = document.createElement('div');
+        card.className = 'officer-card';
+        card.innerHTML = `<strong>${o.name}</strong> - Odznaka: ${o.badge}`;
+        list.appendChild(card);
+    });
+}
+
+// Domyślnie otwórz obywateli
+openTab('citizens');

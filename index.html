@@ -1,48 +1,56 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <title>Tablet LSPD</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Tablet LSPD</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Tablet LSPD</h1>
-    <div class="tabs">
-        <button class="tab-btn" onclick="openTab('citizens')">Obywatele</button>
-        <button class="tab-btn" onclick="openTab('search')">Poszukiwania</button>
-        <button class="tab-btn" onclick="openTab('officers')">Policjanci</button>
-    </div>
+<div class="tablet">
+    <header>
+        <h1>Tablet LSPD</h1>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('citizens')">Obywatele</button>
+            <button class="tab-btn" onclick="openTab('search')">Poszukiwania</button>
+            <button class="tab-btn" onclick="openTab('officers')">Policjanci</button>
+        </div>
+    </header>
 
-    <!-- Zakładka dodawania obywateli -->
-    <div id="citizens" class="tab-content">
-        <h2>Dodaj obywatela</h2>
-        <input id="citizenFirst" placeholder="Imię">
-        <input id="citizenLast" placeholder="Nazwisko">
-        <input id="citizenPhoto" placeholder="URL zdjęcia">
-        <button onclick="addCitizen()">Dodaj</button>
+    <main>
+        <!-- Obywatele -->
+        <div id="citizens" class="tab-content">
+            <h2>Dodaj obywatela</h2>
+            <div class="form-row">
+                <input id="citizenFirst" placeholder="Imię">
+                <input id="citizenLast" placeholder="Nazwisko">
+                <input id="citizenPhoto" placeholder="URL zdjęcia">
+                <button onclick="addCitizen()">Dodaj</button>
+            </div>
+            <h3>Lista obywateli</h3>
+            <div id="citizenList" class="list"></div>
+        </div>
 
-        <h3>Lista obywateli</h3>
-        <div id="citizenList"></div>
-    </div>
+        <!-- Wyszukiwanie -->
+        <div id="search" class="tab-content">
+            <h2>Wyszukaj obywatela</h2>
+            <input id="searchInput" placeholder="Wpisz imię lub nazwisko" oninput="searchCitizen()">
+            <div id="searchResults" class="list"></div>
+        </div>
 
-    <!-- Zakładka wyszukiwania -->
-    <div id="search" class="tab-content">
-        <h2>Wyszukaj obywatela</h2>
-        <input id="searchInput" placeholder="Wpisz imię lub nazwisko" oninput="searchCitizen()">
-        <div id="searchResults"></div>
-    </div>
+        <!-- Policjanci -->
+        <div id="officers" class="tab-content">
+            <h2>Dodaj policjanta</h2>
+            <div class="form-row">
+                <input id="officerName" placeholder="Imię i nazwisko">
+                <input id="badgeNumber" placeholder="Numer odznaki">
+                <button onclick="addOfficer()">Dodaj</button>
+            </div>
+            <h3>Katalog policjantów</h3>
+            <div id="officerList" class="list"></div>
+        </div>
+    </main>
+</div>
 
-    <!-- Zakładka policjantów -->
-    <div id="officers" class="tab-content">
-        <h2>Dodaj policjanta</h2>
-        <input id="officerName" placeholder="Imię i nazwisko">
-        <input id="badgeNumber" placeholder="Numer odznaki">
-        <button onclick="addOfficer()">Dodaj</button>
-
-        <h3>Katalog policjantów</h3>
-        <div id="officerList"></div>
-    </div>
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

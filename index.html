@@ -26,11 +26,17 @@
             <button onclick="addCitizen()">Dodaj</button>
         </div>
 
-        <!-- Obywatele -->
+        <!-- Lista obywateli -->
         <div id="citizensTab" class="tab-content">
             <h2>Obywatele</h2>
-            <input id="searchInput" placeholder="Wpisz imię lub nazwisko" oninput="searchCitizen()">
-            <div id="searchResults" class="list"></div>
+            <input id="searchInput" placeholder="Wpisz imię lub nazwisko" oninput="displayCitizenList()">
+            <div id="citizenList" class="list"></div>
+        </div>
+
+        <!-- Profil obywatela -->
+        <div id="profileTab" class="tab-content">
+            <button onclick="closeProfile()">← Powrót do listy</button>
+            <div id="profileContent"></div>
         </div>
 
         <!-- Policjanci -->
@@ -44,7 +50,6 @@
         </div>
     </main>
 </div>
-
 <script src="script.js"></script>
 </body>
 </html>

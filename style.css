@@ -1,6 +1,7 @@
+/* LSPD Tablet Style */
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: #0b1120;
+    background: #0b1120; /* ciemne tło */
     margin: 0;
     display: flex;
     justify-content: center;
@@ -9,7 +10,7 @@ body {
 
 .tablet {
     width: 800px;
-    background: #1a3a8a; /* mocny niebieski LSPD */
+    background: #1a3a8a; /* niebieski tablet LSPD */
     border-radius: 15px;
     color: #fff;
     box-shadow: 0 10px 25px rgba(0,0,0,0.5);

@@ -7,7 +7,42 @@
 </head>
 <body>
     <h1>Tablet LSPD</h1>
-    <button id="alertBtn">Wyślij zgłoszenie</button>
+    <div class="tabs">
+        <button class="tab-btn" onclick="openTab('citizens')">Obywatele</button>
+        <button class="tab-btn" onclick="openTab('search')">Poszukiwania</button>
+        <button class="tab-btn" onclick="openTab('officers')">Policjanci</button>
+    </div>
+
+    <!-- Zakładka dodawania obywateli -->
+    <div id="citizens" class="tab-content">
+        <h2>Dodaj obywatela</h2>
+        <input id="citizenFirst" placeholder="Imię">
+        <input id="citizenLast" placeholder="Nazwisko">
+        <input id="citizenPhoto" placeholder="URL zdjęcia">
+        <button onclick="addCitizen()">Dodaj</button>
+
+        <h3>Lista obywateli</h3>
+        <div id="citizenList"></div>
+    </div>
+
+    <!-- Zakładka wyszukiwania -->
+    <div id="search" class="tab-content">
+        <h2>Wyszukaj obywatela</h2>
+        <input id="searchInput" placeholder="Wpisz imię lub nazwisko" oninput="searchCitizen()">
+        <div id="searchResults"></div>
+    </div>
+
+    <!-- Zakładka policjantów -->
+    <div id="officers" class="tab-content">
+        <h2>Dodaj policjanta</h2>
+        <input id="officerName" placeholder="Imię i nazwisko">
+        <input id="badgeNumber" placeholder="Numer odznaki">
+        <button onclick="addOfficer()">Dodaj</button>
+
+        <h3>Katalog policjantów</h3>
+        <div id="officerList"></div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
